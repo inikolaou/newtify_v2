@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-12T17:01:32.500929800+03:00[Europe/Athens]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-13T06:53:46.395419+02:00[Europe/Bratislava]")
 @Validated
 @Tag(name = "Articles", description = "Group of endpoints to handle operations with articles")
 public interface ArticlesApi {
@@ -59,6 +59,29 @@ public interface ArticlesApi {
     )
     ResponseEntity<ArticleDTO> createArticle(
         @Parameter(name = "CreateArticleDTO", description = "Data model for article creation", required = true) @Valid @RequestBody CreateArticleDTO createArticleDTO
+    );
+
+
+    /**
+     * DELETE /v1/articles/{articleUuid}
+     * Endpoint which can be used to delete article resource specified by articleUuid
+     *
+     * @param articleUuid Article resource identifier (required)
+     * @return Article was successfully deleted (status code 200)
+     */
+    @Operation(
+        operationId = "deleteArticle",
+        tags = { "articles" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Article was successfully deleted")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/v1/articles/{articleUuid}"
+    )
+    ResponseEntity<Void> deleteArticle(
+        @Parameter(name = "articleUuid", description = "Article resource identifier", required = true) @PathVariable("articleUuid") String articleUuid
     );
 
 
@@ -93,13 +116,13 @@ public interface ArticlesApi {
      * This endpoint will return list of articles
      *
      * @param topic Used to filter articles by topic (optional)
-     * @return It will return list of articles either by topic or all (status code 200)
+     * @return It will return list of articles either by topic or everything (status code 200)
      */
     @Operation(
         operationId = "retrieveArticles",
         tags = { "articles" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "It will return list of articles either by topic or all", content = {
+            @ApiResponse(responseCode = "200", description = "It will return list of articles either by topic or everything", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ArticleDTO.class))
             })
         }
@@ -111,6 +134,32 @@ public interface ArticlesApi {
     )
     ResponseEntity<List<ArticleDTO>> retrieveArticles(
         @Parameter(name = "topic", description = "Used to filter articles by topic") @Valid @RequestParam(value = "topic", required = false) String topic
+    );
+
+
+    /**
+     * PUT /v1/articles/{articleUuid}
+     * Endpoint to update already existing article specified by articleUuid
+     *
+     * @param articleUuid Article resource identifier (required)
+     * @param createArticleDTO Data model with properties which are required for article update (required)
+     * @return Article was successfully updated (status code 200)
+     */
+    @Operation(
+        operationId = "updateArticle",
+        tags = { "articles" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Article was successfully updated")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PUT,
+        value = "/v1/articles/{articleUuid}",
+        consumes = { "application/json" }
+    )
+    ResponseEntity<Void> updateArticle(
+        @Parameter(name = "articleUuid", description = "Article resource identifier", required = true) @PathVariable("articleUuid") String articleUuid,
+        @Parameter(name = "CreateArticleDTO", description = "Data model with properties which are required for article update", required = true) @Valid @RequestBody CreateArticleDTO createArticleDTO
     );
 
 }
